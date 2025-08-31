@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Event Booking</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1 id="welcome-message">Bem-vindo!</h1>
+            <button id="logout-button" class="btn-secondary">Sair</button>
+        </div>
+    </header>
+
+    <main class="dashboard-container">
+        <section class="create-event-section">
+            <h2>Criar Novo Evento</h2>
+            <form id="create-event-form">
+                <div class="form-group">
+                    <label for="event-title">Título</label>
+                    <input type="text" id="event-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="event-description">Descrição</label>
+                    <textarea id="event-description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="event-date">Data e Hora</label>
+                    <input type="text" id="event-date" required placeholder="Selecione a data e hora...">
+                </div>
+                
+                <div class="form-group">
+                    <label for="event-location">Localização (Estado)</label>
+                    <select id="event-location" required>
+                        <option value="" disabled selected>Carregando estados...</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary">Criar Evento</button>
+            </form>
+        </section>
+        <section class="events-list-section">
+            <h2>Próximos Eventos</h2>
+            <div id="events-list"></div>
+        </section>
+    </main>
+    <div id="message-area"></div>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF--T">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Registo - Event Booking API</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div id="login-view">
+            <h1>Entrar</h1>
+            <p>Bem-vindo de volta! Aceda à sua conta.</p>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Senha</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit" class="btn-primary">Entrar</button>
+            </form>
+            <p class="toggle-link">Não tem uma conta? <a href="#" id="show-register">Cadastre-se</a></p>
+        </div>
+
+        <div id="register-view" class="hidden">
+            <h1>Cadastre-se</h1>
+            <p>Crie uma nova conta para começar a reservar eventos.</p>
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Senha</label>
+                    <input type="password" id="register-password" required>
+                </div>
+                <button type="submit" class="btn-primary">Criar Conta</button>
+            </form>
+            <p class="toggle-link">Já tem uma conta? <a href="#" id="show-login">Faça o login</a></p>
+        </div>
+        
+        <div id="message-area"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
