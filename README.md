@@ -1,6 +1,5 @@
 # Plataforma de Reservas de Eventos (API + Frontend)
-
-![Pré-visualização da Aplicação](https://i.imgur.com/link-para-uma-screenshot-sua.png) Um projeto full-stack de uma plataforma de reserva de eventos, construído para demonstrar competências em desenvolvimento backend com Python e frontend com JavaScript puro.
+Um projeto full-stack de uma plataforma de reserva de eventos, construído para demonstrar competências em desenvolvimento backend com Python e frontend com JavaScript puro.
 
 ---
 
