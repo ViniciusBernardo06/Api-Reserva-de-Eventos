@@ -1,4 +1,4 @@
-# app/main.py (VERSÃO COM A CORREÇÃO DO JWT)
+# app/main.py (VERSÃO FINAL E COMPLETA - VERIFICADA)
 
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
@@ -39,12 +39,11 @@ def get_current_user(token: str = Depends(security.oauth2_scheme), db: Session =
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        # CORREÇÃO AQUI: Usamos security.jwt e security.JWTError
         payload = security.jwt.decode(token, security.SECRET_KEY, algorithms=[security.ALGORITHM])
         email: str = payload.get("sub")
         if email is None:
             raise credentials_exception
-    except security.JWTError: # CORREÇÃO AQUI
+    except security.JWTError:
         raise credentials_exception
     user = db.query(models.User).filter(models.User.email == email).first()
     if user is None:
@@ -99,8 +98,23 @@ def read_events(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     events = db.query(models.Event).offset(skip).limit(limit).all()
     return events
 
+@app.delete("/events/{event_id}", status_code=status.HTTP_204_NO_CONTENT, tags=["Eventos"])
+def delete_event(
+    event_id: int, 
+    db: Session = Depends(get_db), 
+    current_user: models.User = Depends(get_current_user)
+):
+    event = db.query(models.Event).filter(models.Event.id == event_id).first()
+    if not event:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Evento não encontrado.")
+    if event.owner_id != current_user.id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Não tem permissão para excluir este evento.")
+    db.delete(event)
+    db.commit()
+    return
+
 
 # --- Endpoint Home ---
 @app.get("/", tags=["Home"])
 def home():
-    return {"message": "Bem-vindo à API de Plataforma de Reservas de Eventos"}
+    return {"mensagem": "Bem-vindo à API de Reservas de Eventos!"}

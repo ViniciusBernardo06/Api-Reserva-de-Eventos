@@ -1,7 +1,7 @@
-
+// script.js (VERSÃO COMPLETA E VERIFICADA)
 
 document.addEventListener('DOMContentLoaded', () => {
-    const API_URL = 'http://127.0.0.1:8000'; // URL da nossa API FastAPI
+    const API_URL = 'http://127.0.0.1:8000';
 
     // --- LÓGICA DA PÁGINA LOGIN.HTML ---
     if (document.getElementById('login-form')) {
@@ -89,24 +89,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const createEventForm = document.getElementById('create-event-form');
         const eventsList = document.getElementById('events-list');
 
-        // Função para carregar os estados do IBGE
         async function populateStatesDropdown() {
             const locationSelect = document.getElementById('event-location');
             try {
                 const response = await fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome');
                 if (!response.ok) throw new Error('Não foi possível carregar os estados.');
-                
                 const states = await response.json();
-                
                 locationSelect.innerHTML = '<option value="" disabled selected>Selecione um estado...</option>';
-                
                 states.forEach(state => {
                     const option = document.createElement('option');
                     option.value = state.sigla;
                     option.textContent = state.nome;
                     locationSelect.appendChild(option);
                 });
-
             } catch (error) {
                 locationSelect.innerHTML = '<option value="" disabled selected>Erro ao carregar estados</option>';
                 console.error(error);
@@ -124,9 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const response = await fetch(`${API_URL}/events/`);
                 if (!response.ok) throw new Error('Não foi possível carregar os eventos.');
-                
                 const events = await response.json();
-                
                 eventsList.innerHTML = '';
                 if (events.length === 0) {
                     eventsList.innerHTML = '<p>Ainda não há eventos. Crie o primeiro!</p>';
@@ -143,6 +136,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <span><strong>Data:</strong> ${eventDate}</span>
                                 <span><strong>Local:</strong> ${event.location}</span>
                                 <span><strong>Organizador:</strong> ${event.owner.email}</span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn-delete" data-event-id="${event.id}">Excluir</button>
                             </div>
                         `;
                         eventsList.appendChild(eventElement);
@@ -161,7 +157,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 date: document.getElementById('event-date').value,
                 location: document.getElementById('event-location').value,
             };
-            
             try {
                 const response = await fetch(`${API_URL}/events/`, {
                     method: 'POST',
@@ -171,7 +166,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     body: JSON.stringify(eventData)
                 });
-
                 if (response.status === 201) {
                     showMessage('Evento criado com sucesso!', 'success');
                     createEventForm.reset();
@@ -182,6 +176,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } catch (error) {
                 showMessage('Erro de conexão ao criar evento.', 'error');
+            }
+        });
+
+        eventsList.addEventListener('click', async (e) => {
+            if (e.target && e.target.classList.contains('btn-delete')) {
+                const eventId = e.target.getAttribute('data-event-id');
+                if (confirm("Tem a certeza que deseja excluir este evento? Esta ação não pode ser desfeita.")) {
+                    try {
+                        const response = await fetch(`${API_URL}/events/${eventId}`, {
+                            method: 'DELETE',
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+                        if (response.status === 204) {
+                            showMessage('Evento excluído com sucesso!', 'success');
+                            fetchEvents();
+                        } else {
+                            const errorData = await response.json();
+                            showMessage(`Erro ao excluir evento: ${errorData.detail}`, 'error');
+                        }
+                    } catch (error) {
+                        showMessage('Erro de conexão ao excluir evento.', 'error');
+                    }
+                }
             }
         });
         
